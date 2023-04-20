@@ -2,15 +2,10 @@ const { Pool } = require("pg")
 
 const config = new Pool({
   user: "postgres",
-  host: "127.0.0.1",
-<<<<<<< users-feature
-  database: "FP1_ReflectionAPI",
-  password: "akmal",
-  port: 5432,
-=======
+  host: "localhost",
   database: "reflectionAPI",
   password: "123",
->>>>>>> main
+  port: 5321
 })
 
 module.exports = config
