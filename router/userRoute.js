@@ -1,11 +1,8 @@
-const express = require('express')
+const express = require("express")
 const app = express()
+const { register, login } = require("../controllers/userController")
 
-app.post('/login',(req,res)=>{
-    res.send("ini login")
-})
+app.post("/register", register)
+app.post("/login", login)
 
-app.post('/register',(req,res)=>{
-    res.send("ini register")
-})
-module.exports= app
+module.exports = app

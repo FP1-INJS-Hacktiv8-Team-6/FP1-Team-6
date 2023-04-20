@@ -1,10 +1,11 @@
-const Pool = require('pg')
+const { Pool } = require("pg")
 
 const config = new Pool({
   user: "postgres",
-  host: "127.0.0.1",
+  host: "localhost",
   database: "reflectionAPI",
   password: "123",
+  port: 5321
 })
 
 module.exports = config
