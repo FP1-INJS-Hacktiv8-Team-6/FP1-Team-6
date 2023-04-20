@@ -4,7 +4,7 @@ class ReflectionController {
     //create reflection by user
     static async createReflection(req, res) {
         // user_id integer
-        const id = 1
+        const id =  res.locals.users.id
         const { success, lowPoint, takeAway } = req.body
         try {
             const reflection = await db.query(
@@ -22,8 +22,8 @@ class ReflectionController {
     
     //get all reflections by user
     static async getAllReflections(req, res) {
-        const id  = 1
         try {
+            const id =  res.locals.user.id
             const reflections = await db.query(`SELECT * FROM "Reflections" WHERE "User_id" = $1`, [id])
             res.status(200).json(reflections.rows)
         } catch (err) {

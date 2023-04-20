@@ -9,17 +9,16 @@ async function authentication(req, res, next) {
     let email = userDecoded.email
 
     const user = await db.query(
-      `SELECT email FROM "Users" WHERE id =$1 AND email = $2 `,
+      `SELECT * FROM "Users" WHERE id =$1 AND email = $2 `,
       [id, email]
     )
-
     if (user.rowCount === 0) {
       return res.status(401).json({
         name: "Authentication Error",
         devMessage: `User with email "${email}" not found in database`,
       })
     } else {
-      res.locals.user = user
+      res.locals.user = user.rows[0]
       return next()
     }
   } catch (err) {

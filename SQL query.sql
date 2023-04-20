@@ -13,8 +13,7 @@ create table "Reflections"(
 	success VARCHAR(255) not null,
 	low_point varchar(255) not null,
 	take_away varchar(255) not null,
-	"User_id" integer not null,
+	"User_id" integer not null REFERENCES "Users"(id),
 	"createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updateAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 )
-

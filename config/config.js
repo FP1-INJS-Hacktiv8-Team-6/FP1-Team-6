@@ -4,8 +4,8 @@ const config = new Pool({
   user: "postgres",
   host: "localhost",
   database: "reflectionAPI",
-  password: "123",
-  port: 5321
+  password: "020711",
+  port: 5432
 })
 
 module.exports = config
