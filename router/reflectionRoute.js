@@ -1,19 +1,10 @@
 const express = require('express')
 const app = express()
+const { createReflection, getAllReflections, updateReflection, deleteReflection } = require('../controllers/reflectionController')
 
-app.get('/',(req,res)=>{
-    res.send("ini menampilkan reflection sendiri")
-})
+app.get('/', getAllReflections)
+app.post('/', createReflection)
+app.put('/:id', updateReflection)
+app.delete('/:id', deleteReflection)
 
-app.post('/',(req,res)=>{
-    res.send("ini menambah reflection")
-})
-
-app.put('/:id',(req,res)=>{
-    res.send("ini untuk update reflection by id")
-})
-
-app.delete('/:id',(req,res)=>{
-    res.send("ini untuk menghapus reflection by id")
-})
-module.exports= app
+module.exports = app
