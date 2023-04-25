@@ -17,3 +17,6 @@ create table "Reflections"(
 	"createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updateAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 )
+
+update "Reflections"
+set "updateAt" = current_timestamp

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
-const SECRET_KEY = "team6"
+require('dotenv').config()
+const SECRET_KEY = process.env.SECRET_KEY
 
 const generateToken = (payload) => {
   const token = jwt.sign(payload, SECRET_KEY)

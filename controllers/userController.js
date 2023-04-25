@@ -10,10 +10,9 @@ class UserController {
     try {
       const hashedPassword = hashPassword(password)
       const checkEmailDuplicate = await db.query(
-        `SELECT email FROM "Users" WHERE email =$1`,
+        `SELECT * FROM "Users" WHERE email =$1`,
         [email]
       )
-      // console.log(checkEmailDuplicate)
       if (checkEmailDuplicate.rowCount === 1) {
         res.status(401).json({
           message: "Email has been used, try another email!",
@@ -23,12 +22,15 @@ class UserController {
           `INSERT INTO "Users" (email, password) VALUES ($1, $2)`,
           [email, hashedPassword]
         )
-
+        const user = await db.query(`SELECT * FROM "Users" WHERE email = $1`, [
+          email
+        ])
+        console.log(user.rows[0]['id']);
         let response = {
           message: "Register Succcess",
           data: {
-            email,
-            password,
+            id : user.rows[0]['id'],
+            email : user.rows[0]['email'],
           },
         }
         res.status(201).json(response)
