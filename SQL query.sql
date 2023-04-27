@@ -20,3 +20,6 @@ create table "Reflections"(
 
 update "Reflections"
 set "updateAt" = current_timestamp
+
+update "Users"
+set "updateAt" = current_timestamp
