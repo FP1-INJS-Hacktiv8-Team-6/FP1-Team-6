@@ -1,0 +1,334 @@
+openapi: 3.0.0
+info:
+  title: Reflection App
+  version: 1.0.0
+servers:
+  - description: Final Project 1 Team 6
+    url: http://localhost:1234
+
+tags:
+  - name: Users
+paths:
+  /api/v1/users/register:
+    post:
+      summary: Register Users
+      tags: 
+      - Users
+      requestBody:
+        $ref: "#/components/requestBodies/InputUsers"
+      responses:
+        "200": 
+          $ref: "#/components/responses/RegisterSuccess"
+        "401": 
+          $ref: "#/components/responses/EmailUsed"
+  
+  /api/v1/users/login:
+    post:
+      summary: Login Users
+      tags: 
+      - Users
+      requestBody:
+        $ref: "#/components/requestBodies/InputUsers"
+      responses:
+        "200": 
+          $ref: "#/components/responses/LoginSuccess"
+        "401": 
+          description: error
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/WrongPassword"
+                  - $ref: "#/components/schemas/UserNotFound"
+          
+  /api/v1/reflections:
+    get:
+      summary: Show all reflection that owned by user
+      tags:
+      - Reflections
+      parameters:
+      - in: header
+        name: token
+        schema:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2ODI2OTA5NDF9.a2KQ1x59d1Q7sHSRB6FsoRqhoV4cXIaCz0nvfkdNXos"
+        required: true
+      responses: 
+        "200" :
+          description: show list of reflection user have, if dont have any reflection will shop blank array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reflections"
+        
+        "401" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+                
+  /api/v1/reflections/:
+    post:
+      summary: Input new Reflections
+      tags:
+      - Reflections
+      parameters:
+      - in: header
+        name: token
+        schema:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2ODI2OTA5NDF9.a2KQ1x59d1Q7sHSRB6FsoRqhoV4cXIaCz0nvfkdNXos"
+        required: true
+      requestBody:
+        $ref: "#/components/requestBodies/ReflectionRequest"
+      responses: 
+        "200" :
+          description: show list of reflection user have, if dont have any reflection will shop blank array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reflections"
+        
+        "401" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+  
+  /api/v1/reflections/{id}:
+    delete:
+      summary: Delete Reflections
+      tags:
+      - Reflections
+      parameters:
+      - in: path
+        name: id
+        description: Reflections id that you want to delete
+        required: true
+        schema:
+          type: number
+          example: 1
+      - in: header
+        name: token
+        schema:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2ODI2OTA5NDF9.a2KQ1x59d1Q7sHSRB6FsoRqhoV4cXIaCz0nvfkdNXos"
+        required: true
+      responses: 
+        "200" :
+          description: show list of reflection user have, if dont have any reflection will shop blank array
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reflections"
+        
+        "401" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+        
+        "404" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReflectionNotFound"
+      
+  /api/v1/reflections/{id}/:
+    put:
+      summary: Edit Reflection by Id
+      tags:
+      - Reflections
+      parameters:
+      - in: path
+        name: id
+        description: Reflections id that you want to delete
+        required: true
+        schema:
+          type: number
+          example: 1
+      - in: header
+        name: token
+        schema:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2ODI2OTA5NDF9.a2KQ1x59d1Q7sHSRB6FsoRqhoV4cXIaCz0nvfkdNXos"
+        required: true
+      requestBody:
+        $ref: "#/components/requestBodies/ReflectionRequest"
+      responses: 
+        "200" :
+          description: show list of reflection user have, if dont have any reflection will shop blank array
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reflections"
+        
+        "401" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+        
+        "404" :
+          description: error if there's no token given
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReflectionNotFound"
+      
+components:
+  requestBodies:
+    InputUsers:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: "admin@admin.com"
+              password:
+                type: string  
+                example: "admin"
+    
+    ReflectionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: string
+                example: "on process"
+              lowPoint:
+                type: string  
+                example: "test"
+              takeAway:
+                type: string  
+                example: "coba coba"
+  
+  responses:
+    LoginSuccess:
+      description: Response when success login User.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Login Success"
+              token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiRW1haWwiOiJhZG1pbkB0cmlwaWUuY29tIiwiY3JlYXRlZEF0IjoiMjAyMi0xMS0zMFQxNDowNzo0OC45MjZaIiwidXBkYXRlZEF0IjoiMjAyMi0xMS0zMFQxNDowNzo0OC45MjZaIiwiaWF0IjoxNjY5ODQyOTMwLCJleHAiOjE2Njk4NDY1MzB9.cyKEBVKxBGhVpiM_5Hw29JEjLVGPuYk7h2wF7oEzAnQ"
+              
+    EmailUsed:
+      description: Response when Email already used
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "email has been used, try another email"
+                
+    RegisterSuccess:
+      description: Response when Email already used
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Register Succcess"
+              data:
+                $ref: "#/components/schemas/Users"
+              
+  schemas:
+    Users:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        email:
+          type: string
+          example: "admin@admin.com"
+    Reflections:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        success:
+          type: string
+          example: "on process"
+        low_point:
+          type: string
+          example: "test"
+        take_away:
+          type: string
+          example: "coba coba"
+        User_id:
+          type: number
+          example: 1
+        createdAt:
+          type: string
+          example: "2023-04-25 18:39:01.96924+07"
+        updateAt:
+          type: string
+          example: "2023-04-25 18:39:01.96924+07"
+    
+    WrongPassword:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "User Login Error"
+        devMessage:
+          type: string
+          example: "User's password with email \"admin@admin.com\" does not match"
+    
+    UserNotFound:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "User Login Error"
+        devMessage:
+          type: string
+          example: "User not found!"
+    
+    Unauthorized:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "JsonWebTokenError"
+        devMessage:
+          type: string
+          example: "jwt must be provided"
+          
+    ReflectionNotFound:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Reflection Not Found"
+        devMessage:
+          type: string
+          example: "Reflection with id \"1\" not found!"
+          
